@@ -24,10 +24,19 @@ SettingsScreen = ({navigation})=> {
 
   function updatePassword(){
     if((data.password===data.confirm_password)&&(data.password.length>5)){
-      auth().currentUser.updatePassword(data.password);
-      Alert.alert('Password Updated','Done'[
-        {text:'logOut now', onPress:()=>{signOut()}
-        }])
+      auth().currentUser.updatePassword(data.password).then(res=>{
+          console.log(res);
+          Alert.alert('Password Updated','Done'[
+            {text:'logOut now', onPress:()=>{signOut()}
+            }])
+      }).catch(error=>{
+          console.log(error);
+          Alert.alert('Opps!','This is sensitive activity, So please sign in again',[
+            {text:'back', onPress:()=>console.log("alrert closed"),},
+            {text:'sign Out', onPress:()=>{signOut()},}
+        ])
+      });
+      
     }else{
       Alert.alert('Opps!','Passwords Not matched or need more than 6 charactors',[
         {text:'Try again', onPress:()=>console.log("alrert closed")
