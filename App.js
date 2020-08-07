@@ -153,16 +153,10 @@ function App() {
       dispatch({type:'LOGOUT'});
     });
     },
-    signUp:(name,profileImage,username,email,password,role)=>{
-      console.log(role);
-      auth().createUserWithEmailAndPassword(email,password).then((res)=>{
-        console.log("user created");
-        console.log(res.user.email);
-        firestore().collection('users').doc(res.user.uid).set({name:name,profileImage:profileImage,username:username,email:res.user.email,uid:res.user.uid,role:role});
-        dispatch({type:'SIGNUP',email: res.user.email, uid :res.user.uid, role:role,username:username,name:name,profileImage:profileImage});
-      },error=>{
-        return error;
-      })
+    signUp:(name,profileImage,username,email,role,userId)=>{
+      let userToken;
+      userToken= null;
+      dispatch({type:'SIGNUP',email: email, uid :userId, role:role,username:username,name:name,profileImage:profileImage});       
     }
   }));
 
