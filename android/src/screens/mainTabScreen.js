@@ -1,5 +1,8 @@
 import React from 'react';
-
+import {
+  View,
+  Text,
+} from 'react-native'
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
@@ -110,6 +113,17 @@ const homeStackScreen =({navigation})=>{
                     backgroundColor="#009387"
                  >
                 </Icon.Button>)
+              },
+
+              headerRight: ()=>{
+                return (
+                  <>
+                  <View style={{flexDirection:"column"}}>
+                  <Text style={{color:'red',size:10}}>Y.A.U.I.Sensly</Text>
+                  <Text style={{color: 'red',size:10}}>17001625</Text>
+                  </View>
+                  </>
+                  )
               }
             }}
                />

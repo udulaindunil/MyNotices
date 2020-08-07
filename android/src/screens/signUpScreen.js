@@ -22,11 +22,25 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import { color } from 'react-native-reanimated';
 import {AuthContext} from '../../../contextFiles/context'
+import auth from '@react-native-firebase/auth';
+import firestore from "@react-native-firebase/firestore"
 
 const SignUpScreen = ({navigation})=>{
 
-    // const {signUp} = React.useContext(AuthContext);
+    const {signUp} = React.useContext(AuthContext);
     
+    function ValidateEmail(mail)    
+    {
+        var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if (mail.match(mailformat))
+            {
+                return (true)
+            }
+                alert("You have entered an invalid email address!")
+                return (false)
+            }
+
+        
 
    
     
@@ -80,6 +94,8 @@ const SignUpScreen = ({navigation})=>{
         }
     }
 
+
+
     const emailTextInputChange = (val) => {
         if( val.length !== 0 ) {
             setData({
@@ -125,15 +141,70 @@ const SignUpScreen = ({navigation})=>{
         });
     }
 
-    const signInHandle=(name,profileImage,username,email,password,role)=>{
-        if(name.length>3 && username.length>3 && email.length>3 && password.length>5 && (role=='admin' || role=='staff')){
-            signUp(name,profileImage,username,email,password,role)
-        }else{
-            Alert.alert('Opps!','Invalid details',[
+    const signUpHandle=(name,profileImage,username,email,password,confirmPassword,role)=>{
+        console.log(data.name);
+
+        if(username.length<3){
+            Alert.alert('Opps!',"User Name need more than 3 charactors",[
                 {text:'Try again', onPress:()=>console.log("alrert closed")
                 }
             ])
-        }
+        }else if(name.length<3){
+            
+            Alert.alert('Opps!'," Name need more than 3 charactors",[
+                {text:'Try again', onPress:()=>console.log("alrert closed")
+                }
+            ])
+        }else if(!ValidateEmail(email)){
+        
+            
+        }else if(password.length<5){
+            Alert.alert('Opps!',"need more than 5 charactors for password",[
+                {text:'Try again', onPress:()=>console.log("alrert closed")
+                }
+            ])
+
+        }else if(!(password===confirmPassword)){
+            Alert.alert('Opps!',"Password mismatch , please check again",[
+                {text:'Try again', onPress:()=>console.log("alrert closed")
+                }
+            ])
+        
+        }else if(!(role=='admin' || role=='staff')){
+            Alert.alert('Opps!',"Please select 'admin' or 'staff'",[
+                {text:'Try again', onPress:()=>console.log("alrert closed")
+                }
+            ])
+        }else{           
+            auth().createUserWithEmailAndPassword(email,password).then((res)=>{
+                console.log("user created");
+                console.log(res.user.email);
+                firestore().collection('users').doc(res.user.uid).set({name:name,profileImage:profileImage,username:username,email:res.user.email,uid:res.user.uid,role:role});
+                signUp(name,profileImage,username,email,role,res.user.uid)
+         
+                // dispatch({type:'SIGNUP',email: res.user.email, uid :res.user.uid, role:role,username:username,name:name,profileImage:profileImage});
+              },error=>{   
+                console.log(error);
+                errorCode = error.code;
+                console.log(error.code);
+                errorMessage = error.message;
+                message="";
+                if (errorCode === 'auth/email-already-in-use') {
+                    console.log("The email address is already in use by another account");
+                    message="The email address is already in use by another account"
+                } else if (errorCode === 'auth/too-many-requests'){
+                    message="Too many unsuccessfull logins, Please try again later"
+                }else{
+                    message="Invalid details!"
+                }
+                Alert.alert('Opps!',message,[
+                    {text:'Try again', onPress:()=>console.log("alrert closed")
+                    }
+                ])
+                return error;
+              })
+
+            }
     }
 
         return (
@@ -211,6 +282,7 @@ const SignUpScreen = ({navigation})=>{
                             color="#05375a"
                             size={20}/>
                         <TextInput
+                            keyboardType='email-address'
                             placeholder="Your Email"
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -322,7 +394,7 @@ const SignUpScreen = ({navigation})=>{
                         
                     <TouchableOpacity
                             style={styles.signIn}
-                            // onPress={()=>{signInHandle(data.name,data.profileImage,data.username,data.email,data.password,role)}}
+                            onPress={()=>{signUpHandle(data.name,data.profileImage,data.username,data.email,data.password,data.confirm_password,role)}}
                         >
                                 <LinearGradient
                                     colors={['#08d4c4', '#01ab9d']}

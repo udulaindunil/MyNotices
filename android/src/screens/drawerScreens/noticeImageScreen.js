@@ -44,8 +44,10 @@ NoticeImageScreen = ({navigation,route})=> {
     const tempNotice =firestore().collection('notices').doc(id).get().then(res=>{
       setNotice(res.data())
     })
-        
-    },[])
+       return(()=>{
+         setNotice('');
+       }) 
+    },[id])
 
   return (
     <>

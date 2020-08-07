@@ -67,7 +67,7 @@ function PublicNotices({item,navigation}){
                                             uri: `${item.imageUrl}`,
                                         }}
                                         style={{height: 50, width: 50,alignContent:"flex-end"}}
-                                        imageStyle={{borderRadius: 15}}>
+                                        imageStyle={{borderRadius: 5}}>
                                         <View
                                             style={{
                                             flex: 1,

@@ -14,6 +14,7 @@ import LinearGradient from 'react-native-linear-gradient';
 // import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import * as Animatable from 'react-native-animatable';
+import auth from '@react-native-firebase/auth';
 
 
 const SplashScreen = ({navigation})=>{
@@ -34,6 +35,14 @@ const SplashScreen = ({navigation})=>{
                 </Text>
                 <Text style={styles.text}>
                     Sign in with account
+                </Text>
+
+                <Text style={styles.d}>
+                    Y.A.U.I.Sensly
+                </Text>
+
+                <Text style={styles.d}>
+                    17001625
                 </Text>
                 <View style={styles.button}>
 
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
   },
   button: {
       alignItems: 'flex-end',
-      marginTop: 30
+      marginTop: 20
   },
   signIn: {
       width: 150,
@@ -109,6 +118,9 @@ const styles = StyleSheet.create({
   textSign: {
       color: 'white',
       fontWeight: 'bold'
+  },d:{
+    color: 'red',
+    marginTop:5
   }
 });
 

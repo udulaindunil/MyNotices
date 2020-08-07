@@ -138,8 +138,7 @@ const SignInScreen = ({navigation})=>{
     }
 
 
-    function ValidateEmail(mail)    
-    {
+    function ValidateEmail(mail){
         var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if (mail.match(mailformat))
             {
